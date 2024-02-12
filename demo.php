@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Kalkulačka</title>
 
     <style>
@@ -49,26 +48,57 @@
 </head>
 <body>
 
-    <form action="">
-        <input type="text" class="NumberText" placeholder="ČÍSLO1">
+    <form action="" method="post">
+        <input type="text" name="NumberText1" class="NumberText NumberText1" placeholder="ČÍSLO1">
 
         <select name="operations" id="" class="dropdownlist" >
             <option value="+">+</option>
             <option value="-">-</option>
             <option value="*">*</option>
-            <option value=":">:</option>
+            <option value="/">/</option>
         </select>
 
-        <input type="text" class="NumberText" placeholder="ČÍSLO2">
+        <input type="text" name="NumberText2" class="NumberText NumberText2" placeholder="ČÍSLO2">
 
         <input type="submit" value="Spočítač" class="count">
-        <h1 id="result">/-_-/</h1>
+
+        <h1 id="result"></h1>
     </form>
 
+    <script>
+        let input = document.querySelector("count")
+        input.addEventListener("submit", (event) => {
+            event.preventDefault();
+        })
+    </script>
 
 
     <?php
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $number1 = isset($_POST["NumberText1"]) ? $_POST["NumberText1"] : 0;
+            $number2 = isset($_POST["NumberText2"]) ? $_POST["NumberText2"] : 0;
+            $operation = isset($_POST["operations"]) ? $_POST["operations"] : '+';
 
+            switch ($operation) {
+                case '+':
+                    $result = $number1 + $number2;
+                    break;
+                case '-':
+                    $result = $number1 - $number2;
+                    break;
+                case '*':
+                    $result = $number1 * $number2;
+                    break;
+                case '/':
+                    $result = ($number2 != 0) ? ($number1 / $number2) : "Cannot divide by zero!";
+                    break;
+                default:
+                    $result = "Invalid operation";
+            }
+
+            echo '<h1 id="result">' . $result . '</h1>';
+        }
+            
     ?>
 </body>
 </html>
